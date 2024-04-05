@@ -1,0 +1,6 @@
+github.com/reiver/go-httprequestpath v0.0.0-20240405160912-eb02c601d742 h1:t8TWuPMRROy3IE7udT/2tPXqKfdvhK+U0cCeatj5t28=
+github.com/reiver/go-httprequestpath v0.0.0-20240405160912-eb02c601d742/go.mod h1:rvu+gB51JKelRLol1DGRVCg7LLLrsiJIotHpnYU497g=
+github.com/reiver/go-path v0.0.0-20240327181650-5f2ee05890d8 h1:8JFCnRV4GVjP8XUFuXvCH42o4fXHSkGcUkfsloB+LeY=
+github.com/reiver/go-path v0.0.0-20240327181650-5f2ee05890d8/go.mod h1:4H3fxXTRSuvWviraF1tFTVXhRciV8KFGq5tzo1gb2Tk=
+sourcecode.social/reiver/go-erorr v0.0.0-20230922202459-231149d185a1 h1:wpnz4JicQBLWrgGphYBls7DysIFCcnWgDz/vce/sY8E=
+sourcecode.social/reiver/go-erorr v0.0.0-20230922202459-231149d185a1/go.mod h1:NFtd7fzEf0r6A6R7JXYZfayRhPaJy0zt/18VWoLzrxA=
