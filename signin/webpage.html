@@ -34,16 +34,16 @@ if (window.ethereum) {
 			const account = accounts[0]
 
 			window.ethereum.request({
-				method: 'eth_signTypedData_v4',
+				method: "personal_sign",
 				params: [
 					"REPLACE_ME_CHALLENGE",
 					account
 				]
 			})
-				.then(accounts => {
+				.then(result => {
 
-					println("accounts:")
-					println(JSON.stringify(accounts))
+					println("result:")
+					println(JSON.stringify(result))
 				})
 				.catch(error => {
 
