@@ -102,7 +102,7 @@ func (receiver internalHTTPHandler) ServeGET(responseWriter http.ResponseWriter,
 			return
 		}
 
-		var replacemevalue string = fmt.Sprintf("signin to Earnie on %s with code %X", time.Now().Format(time.RFC3339), code[:])
+		var replacemevalue string = fmt.Sprintf("Earnie signin (%d %X)", time.Now().Unix(), code[:])
 		replacemevalue = fmt.Sprintf("0x%x", replacemevalue)
 
 		var replaced string = strings.ReplaceAll(webpage, replacemekey, replacemevalue)
