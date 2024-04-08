@@ -1,6 +1,7 @@
 package dappsignin
 
 import (
+	"crypto/rand"
 	"fmt"
 	_ "embed"
 	"io"
@@ -67,7 +68,14 @@ func (receiver internalHTTPHandler) ServeHTTP(responseWriter http.ResponseWriter
 			return
 		}
 
-		var replacemevalue string = fmt.Sprintf("signin to Earnie on %d", time.Now().Format(time.RFC3339))
+		var code [25]byte
+		_, err :=  rand.Read(code[:])
+		if nil != err {
+			http.Error(responseWriter, statusTextInternalServerError, http.StatusInternalServerError)
+			return
+		}
+
+		var replacemevalue string = fmt.Sprintf("signin to Earnie on %s with code %X", time.Now().Format(time.RFC3339), code[:])
 		replacemevalue = fmt.Sprintf("0x%x", replacemevalue)
 
 		var replaced string = strings.ReplaceAll(webpage, replacemekey, replacemevalue)
