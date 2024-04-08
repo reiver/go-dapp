@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+//	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	"github.com/reiver/go-httprequestpath"
 	"github.com/reiver/go-path"
 )
@@ -19,6 +20,7 @@ var replacemekey string = "REPLACE_ME_CHALLENGE"
 var webpage string
 
 var statusTextInternalServerError string = http.StatusText(http.StatusInternalServerError)
+var statusTextMethodNotAllowed    string = http.StatusText(http.StatusMethodNotAllowed)
 var statusTextNotFound            string = http.StatusText(http.StatusNotFound)
 
 func HTTPHandler(httpRequestPath string) http.Handler {
@@ -37,6 +39,7 @@ func (receiver internalHTTPHandler) ServeHTTP(responseWriter http.ResponseWriter
 	if nil == responseWriter {
 		return
 	}
+
 	if nil == request {
 		http.Error(responseWriter, statusTextInternalServerError, http.StatusInternalServerError)
 		return
@@ -63,6 +66,30 @@ func (receiver internalHTTPHandler) ServeHTTP(responseWriter http.ResponseWriter
 	}
 
 	{
+		switch request.Method {
+		case http.MethodGet:
+			receiver.ServeGET(responseWriter, request)
+			return
+		case http.MethodPost:
+			receiver.ServePOST(responseWriter, request)
+			return
+		default:
+			http.Error(responseWriter, statusTextMethodNotAllowed, http.StatusMethodNotAllowed)
+			return
+		}
+	}
+}
+
+func (receiver internalHTTPHandler) ServeGET(responseWriter http.ResponseWriter, request *http.Request) {
+	if nil == responseWriter {
+		return
+	}
+	if nil == request {
+		http.Error(responseWriter, statusTextInternalServerError, http.StatusInternalServerError)
+		return
+	}
+
+	{
 		if len(webpage) <= 0 {
 			http.Error(responseWriter, statusTextInternalServerError, http.StatusInternalServerError)
 			return
@@ -83,4 +110,20 @@ func (receiver internalHTTPHandler) ServeHTTP(responseWriter http.ResponseWriter
 		responseWriter.Header().Add("Cache-Control", "no-cache")
 		io.WriteString(responseWriter, replaced)
 	}
+}
+
+func (receiver internalHTTPHandler) ServePOST(responseWriter http.ResponseWriter, request *http.Request) {
+	if nil == responseWriter {
+		return
+	}
+	if nil == request {
+		http.Error(responseWriter, statusTextInternalServerError, http.StatusInternalServerError)
+		return
+	}
+
+//	{
+//		var verified bool = ethcrypto.VerifySignature()
+//	}
+
+			
 }

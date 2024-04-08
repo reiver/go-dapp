@@ -24,6 +24,11 @@ println("Hello world!")
 if (window.ethereum) {
 	println("We have window.ethereum :-)")
 
+	const challenge = "REPLACE_ME_CHALLENGE"
+
+	println("challenge:")
+	println(challenge)
+
 	window.ethereum.request({ method: 'eth_requestAccounts' })
 		.then(accounts => {
 
@@ -36,7 +41,7 @@ if (window.ethereum) {
 			window.ethereum.request({
 				method: "personal_sign",
 				params: [
-					"REPLACE_ME_CHALLENGE",
+					challenge,
 					account
 				]
 			})
