@@ -16,9 +16,7 @@ type Signature struct {
 	data []byte
 }
 
-func LoadSignatureFromBytes(p []byte) (Signature, error) {
-	var data []byte = append([]byte(nil), p...)
-
+func LoadSignatureFromBytes(data []byte) (Signature, error) {
 	return Signature{
 		data:data,
 	}, nil
@@ -49,9 +47,7 @@ func LoadSignatureFromHexadecimalString(hexstr string) (Signature, error) {
 		}
 	}
 
-	return Signature{
-		data:data,
-	}, nil
+	return LoadSignatureFromBytes(data)
 }
 
 func (receiver Signature) Bytes() []byte {
