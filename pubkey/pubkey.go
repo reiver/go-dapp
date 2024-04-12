@@ -20,21 +20,21 @@ const (
 	errPublicKeyBytesTooShort             = erorr.Error("dapp: public-key bytes too short")
 )
 
-type PubKey struct {
+type PublicKey struct {
 	data []byte
 }
 
-func LoadPubKeyFromBytes(data []byte) (PubKey, error) {
-	return PubKey{
+func LoadPublicKeyFromBytes(data []byte) (PublicKey, error) {
+	return PublicKey{
 		data:data,
 	}, nil
 }
 
-func LoadPubKeyFromHexadecimalString(hexstr string) (PubKey, error) {
+func LoadPublicKeyFromHexadecimalString(hexstr string) (PublicKey, error) {
 	var length int = len(hexstr)
 
 	if length < 2 {
-		return PubKey{}, errPublicKeyHexadecimalStringTooShort
+		return PublicKey{}, errPublicKeyHexadecimalStringTooShort
 	}
 
 	{
@@ -51,32 +51,32 @@ func LoadPubKeyFromHexadecimalString(hexstr string) (PubKey, error) {
 
 		data, err = hex.DecodeString(hexstr)
 		if nil != err {
-			return PubKey{}, erorr.Errorf("dapp: problem decoding hexadecimal-string: %w", err)
+			return PublicKey{}, erorr.Errorf("dapp: problem decoding hexadecimal-string: %w", err)
 		}
 	}
 
-	return LoadPubKeyFromBytes(data)
+	return LoadPublicKeyFromBytes(data)
 }
 
-func LoadPubKeyFromMessageAndSignature(message dappmessage.Message, signature dappsignature.Signature) (PubKey, error) {
-	return LoadPubKeyFromEthereumTextHashDigestAndSignature(message.EthereumTextHashDigest(), signature)
+func LoadPublicKeyFromMessageAndSignature(message dappmessage.Message, signature dappsignature.Signature) (PublicKey, error) {
+	return LoadPublicKeyFromEthereumTextHashDigestAndSignature(message.EthereumTextHashDigest(), signature)
 }
 
-func LoadPubKeyFromEthereumTextHashDigestAndSignature(ethereumTextHashDigest dappdigest.Digest, signature dappsignature.Signature) (PubKey, error) {
+func LoadPublicKeyFromEthereumTextHashDigestAndSignature(ethereumTextHashDigest dappdigest.Digest, signature dappsignature.Signature) (PublicKey, error) {
 
 	pubKeyData, err := ethcrypto.Ecrecover(ethereumTextHashDigest.Bytes(), signature.Bytes())
 	if nil != err {
-		return PubKey{}, erorr.Errorf("dapp: problem with loading pub-key from message and signature: %w", err)
+		return PublicKey{}, erorr.Errorf("dapp: problem with loading pub-key from message and signature: %w", err)
 	}
 
-	return LoadPubKeyFromBytes(pubKeyData)
+	return LoadPublicKeyFromBytes(pubKeyData)
 }
 
-func (receiver PubKey) Bytes() []byte {
+func (receiver PublicKey) Bytes() []byte {
 	return append([]byte(nil), receiver.data...)
 }
 
-func (receiver PubKey) ECDSAPubKey() (ecdsa.PublicKey, error) {
+func (receiver PublicKey) ECDSAPublicKey() (ecdsa.PublicKey, error) {
 
 	if len(receiver.data) <= 0 {
 		return ecdsa.PublicKey{}, errPublicKeyBytesTooShort
@@ -93,6 +93,6 @@ func (receiver PubKey) ECDSAPubKey() (ecdsa.PublicKey, error) {
 	return ecdsaPublicKey, nil
 }
 
-func (receiver PubKey) HexadecimalString() string {
+func (receiver PublicKey) HexadecimalString() string {
 	return fmt.Sprintf("0x%x", receiver.data)
 }
