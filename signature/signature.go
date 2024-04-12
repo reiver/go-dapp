@@ -24,7 +24,7 @@ func LoadSignatureFromBytes(p []byte) (Signature, error) {
 	}, nil
 }
 
-func LoadSignatureFromHexadecimal(hexstr string) (Signature, error) {
+func LoadSignatureFromHexadecimalString(hexstr string) (Signature, error) {
 	var length int = len(hexstr)
 
 	if length < 2 {
