@@ -1,8 +1,10 @@
 package dapppubkey
 
 import (
+	"crypto/ecdsa"
 	"encoding/hex"
 	"fmt"
+	"math/big"
 	"strings"
 
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
@@ -14,7 +16,8 @@ import (
 )
 
 const (
-	errHexadecimalStringPubKeyTooShort = erorr.Error("dapp: hexadecimal-string pub-key too short")
+	errPublicKeyHexadecimalStringTooShort = erorr.Error("dapp: public-key hexadecimal-string too short")
+	errPublicKeyBytesTooShort             = erorr.Error("dapp: public-key bytes too short")
 )
 
 type PubKey struct {
@@ -31,7 +34,7 @@ func LoadPubKeyFromHexadecimalString(hexstr string) (PubKey, error) {
 	var length int = len(hexstr)
 
 	if length < 2 {
-		return PubKey{}, errHexadecimalStringPubKeyTooShort
+		return PubKey{}, errPublicKeyHexadecimalStringTooShort
 	}
 
 	{
@@ -71,6 +74,23 @@ func LoadPubKeyFromEthereumTextHashDigestAndSignature(ethereumTextHashDigest dap
 
 func (receiver PubKey) Bytes() []byte {
 	return append([]byte(nil), receiver.data...)
+}
+
+func (receiver PubKey) ECDSAPubKey() (ecdsa.PublicKey, error) {
+
+	if len(receiver.data) <= 0 {
+		return ecdsa.PublicKey{}, errPublicKeyBytesTooShort
+	}
+
+//@TODO: should I be checking if this actually contrains the prefix I think it contains.
+	// Remove the prefix (0x04 for uncompressed key)
+	var truncatedPublicKeyBytes []byte = receiver.data[1:]
+
+	var ecdsaPublicKey ecdsa.PublicKey
+	ecdsaPublicKey.X = new(big.Int).SetBytes(truncatedPublicKeyBytes[:32])
+	ecdsaPublicKey.Y = new(big.Int).SetBytes(truncatedPublicKeyBytes[32:])
+
+	return ecdsaPublicKey, nil
 }
 
 func (receiver PubKey) HexadecimalString() string {
