@@ -54,6 +54,6 @@ func (receiver Signature) Bytes() []byte {
 	return append([]byte(nil), receiver.data...)
 }
 
-func (receiver Signature) String() string {
+func (receiver Signature) HexadecimalString() string {
 	return fmt.Sprintf("0x%x", receiver.data)
 }
