@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	errHexadecimalStringSignatureTooShort = erorr.Error("dapp: hexadecimal-signature too short")
+	errHexadecimalStringSignatureTooShort = erorr.Error("dapp: hexadecimal-string signature too short")
 )
 
 type Signature struct {
