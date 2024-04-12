@@ -8,6 +8,7 @@ import (
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	"sourcecode.social/reiver/go-erorr"
 
+	"github.com/reiver/go-dapp/digest"
 	"github.com/reiver/go-dapp/message"
 	"github.com/reiver/go-dapp/signature"
 )
@@ -58,9 +59,9 @@ func LoadPubKeyFromMessageAndSignature(message dappmessage.Message, signature da
 	return LoadPubKeyFromEthereumTextHashDigestAndSignature(message.EthereumTextHashDigest(), signature)
 }
 
-func LoadPubKeyFromEthereumTextHashDigestAndSignature(ethereumTextHashDigest []byte, signature dappsignature.Signature) (PubKey, error) {
+func LoadPubKeyFromEthereumTextHashDigestAndSignature(ethereumTextHashDigest dappdigest.Digest, signature dappsignature.Signature) (PubKey, error) {
 
-	pubKeyData, err := ethcrypto.Ecrecover(ethereumTextHashDigest, signature.Bytes())
+	pubKeyData, err := ethcrypto.Ecrecover(ethereumTextHashDigest.Bytes(), signature.Bytes())
 	if nil != err {
 		return PubKey{}, erorr.Errorf("dapp: problem with loading pub-key from message and signature: %w", err)
 	}
