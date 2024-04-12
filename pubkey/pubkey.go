@@ -55,8 +55,12 @@ func LoadPubKeyFromHexadecimalString(hexstr string) (PubKey, error) {
 }
 
 func LoadPubKeyFromMessageAndSignature(message dappmessage.Message, signature dappsignature.Signature) (PubKey, error) {
+	return LoadPubKeyFromEthereumTextHashDigestAndSignature(message.EthereumTextHashDigest(), signature)
+}
 
-	pubKeyData, err := ethcrypto.Ecrecover(message.EthereumTextHashDigest(), signature.Bytes())
+func LoadPubKeyFromEthereumTextHashDigestAndSignature(ethereumTextHashDigest []byte, signature dappsignature.Signature) (PubKey, error) {
+
+	pubKeyData, err := ethcrypto.Ecrecover(ethereumTextHashDigest, signature.Bytes())
 	if nil != err {
 		return PubKey{}, erorr.Errorf("dapp: problem with loading pub-key from message and signature: %w", err)
 	}
