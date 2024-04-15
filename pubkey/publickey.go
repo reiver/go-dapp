@@ -29,7 +29,7 @@ type PublicKey struct {
 }
 
 func NoPublicKey() PublicKey {
-	return NoPublicKey()
+	return PublicKey{}
 }
 
 func LoadPublicKeyFromBytes(data []byte) (PublicKey, error) {
