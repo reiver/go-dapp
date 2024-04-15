@@ -73,7 +73,12 @@ func LoadPublicKeyFromMessageAndSignature(message dappmessage.Message, signature
 
 func LoadPublicKeyFromEthereumTextHashDigestAndSignature(ethereumTextHashDigest dappdigest.Digest, signature dappsignature.Signature) (PublicKey, error) {
 
-	pubKeyData, err := ethcrypto.Ecrecover(ethereumTextHashDigest.Bytes(), signature.Bytes())
+	var signatureBytes []byte = signature.Bytes()
+	if 27 == signatureBytes[ethcrypto.RecoveryIDOffset] || 28 == signatureBytes[ethcrypto.RecoveryIDOffset] {
+		signatureBytes[ethcrypto.RecoveryIDOffset] -= 27 // Transform yellow paper V from 27/28 to 0/1
+	}
+
+	pubKeyData, err := ethcrypto.Ecrecover(ethereumTextHashDigest.Bytes(), signatureBytes)
 	if nil != err {
 		return NoPublicKey(), erorr.Errorf("dapp: problem with loading pub-key from message and signature: %w", err)
 	}
