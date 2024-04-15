@@ -7,25 +7,34 @@ import (
 	"math/big"
 	"strings"
 
+	ethcommon "github.com/ethereum/go-ethereum/common"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	"sourcecode.social/reiver/go-erorr"
 
+	"github.com/reiver/go-dapp/address"
 	"github.com/reiver/go-dapp/digest"
 	"github.com/reiver/go-dapp/message"
 	"github.com/reiver/go-dapp/signature"
 )
 
 const (
+	errNothing                            = erorr.Error("dapp: no public-key")
 	errPublicKeyHexadecimalStringTooShort = erorr.Error("dapp: public-key hexadecimal-string too short")
 	errPublicKeyBytesTooShort             = erorr.Error("dapp: public-key bytes too short")
 )
 
 type PublicKey struct {
 	data []byte
+	something bool
+}
+
+func NoPublicKey() PublicKey {
+	return NoPublicKey()
 }
 
 func LoadPublicKeyFromBytes(data []byte) (PublicKey, error) {
 	return PublicKey{
+		something:true,
 		data:data,
 	}, nil
 }
@@ -34,7 +43,7 @@ func LoadPublicKeyFromHexadecimalString(hexstr string) (PublicKey, error) {
 	var length int = len(hexstr)
 
 	if length < 2 {
-		return PublicKey{}, errPublicKeyHexadecimalStringTooShort
+		return NoPublicKey(), errPublicKeyHexadecimalStringTooShort
 	}
 
 	{
@@ -51,7 +60,7 @@ func LoadPublicKeyFromHexadecimalString(hexstr string) (PublicKey, error) {
 
 		data, err = hex.DecodeString(hexstr)
 		if nil != err {
-			return PublicKey{}, erorr.Errorf("dapp: problem decoding hexadecimal-string: %w", err)
+			return NoPublicKey(), erorr.Errorf("dapp: problem decoding hexadecimal-string: %w", err)
 		}
 	}
 
@@ -66,10 +75,30 @@ func LoadPublicKeyFromEthereumTextHashDigestAndSignature(ethereumTextHashDigest 
 
 	pubKeyData, err := ethcrypto.Ecrecover(ethereumTextHashDigest.Bytes(), signature.Bytes())
 	if nil != err {
-		return PublicKey{}, erorr.Errorf("dapp: problem with loading pub-key from message and signature: %w", err)
+		return NoPublicKey(), erorr.Errorf("dapp: problem with loading pub-key from message and signature: %w", err)
 	}
 
 	return LoadPublicKeyFromBytes(pubKeyData)
+}
+
+func (receiver PublicKey) Address() (dappaddress.Address, error) {
+	if !receiver.something {
+		return dappaddress.NoAddress(), errNothing
+	}
+
+	var ecdsaPublicKey ecdsa.PublicKey
+	{
+		var err error
+
+		ecdsaPublicKey, err = receiver.ECDSAPublicKey()
+		if nil != err {
+			return dappaddress.NoAddress(), err
+		}
+	}
+
+	var addressFromECDSAPublicKey ethcommon.Address = ethcrypto.PubkeyToAddress(ecdsaPublicKey)
+
+	return dappaddress.LoadAddressFromBytes(addressFromECDSAPublicKey[:])
 }
 
 func (receiver PublicKey) Bytes() []byte {
@@ -82,7 +111,7 @@ func (receiver PublicKey) ECDSAPublicKey() (ecdsa.PublicKey, error) {
 		return ecdsa.PublicKey{}, errPublicKeyBytesTooShort
 	}
 
-//@TODO: should I be checking if this actually contrains the prefix I think it contains.
+//@TODO: should I be checking if this actually contains the prefix I think it contains.
 	// Remove the prefix (0x04 for uncompressed key)
 	var truncatedPublicKeyBytes []byte = receiver.data[1:]
 
