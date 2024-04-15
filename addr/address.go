@@ -1,4 +1,4 @@
-package dappaddress
+package dappaddr
 
 import (
 	"encoding/hex"

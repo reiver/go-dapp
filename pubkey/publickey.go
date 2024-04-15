@@ -11,7 +11,7 @@ import (
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	"sourcecode.social/reiver/go-erorr"
 
-	"github.com/reiver/go-dapp/address"
+	"github.com/reiver/go-dapp/addr"
 	"github.com/reiver/go-dapp/digest"
 	"github.com/reiver/go-dapp/message"
 	"github.com/reiver/go-dapp/signature"
@@ -86,9 +86,9 @@ func LoadPublicKeyFromEthereumTextHashDigestAndSignature(ethereumTextHashDigest 
 	return LoadPublicKeyFromBytes(pubKeyData)
 }
 
-func (receiver PublicKey) Address() (dappaddress.Address, error) {
+func (receiver PublicKey) Address() (dappaddr.Address, error) {
 	if !receiver.something {
-		return dappaddress.NoAddress(), errNothing
+		return dappaddr.NoAddress(), errNothing
 	}
 
 	var ecdsaPublicKey ecdsa.PublicKey
@@ -97,13 +97,13 @@ func (receiver PublicKey) Address() (dappaddress.Address, error) {
 
 		ecdsaPublicKey, err = receiver.ECDSAPublicKey()
 		if nil != err {
-			return dappaddress.NoAddress(), err
+			return dappaddr.NoAddress(), err
 		}
 	}
 
 	var addressFromECDSAPublicKey ethcommon.Address = ethcrypto.PubkeyToAddress(ecdsaPublicKey)
 
-	return dappaddress.LoadAddressFromBytes(addressFromECDSAPublicKey[:])
+	return dappaddr.LoadAddressFromBytes(addressFromECDSAPublicKey[:])
 }
 
 func (receiver PublicKey) Bytes() []byte {
