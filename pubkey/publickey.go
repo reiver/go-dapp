@@ -14,7 +14,7 @@ import (
 	"github.com/reiver/go-dapp/addr"
 	"github.com/reiver/go-dapp/digest"
 	"github.com/reiver/go-dapp/message"
-	"github.com/reiver/go-dapp/signature"
+	"github.com/reiver/go-dapp/sig"
 )
 
 const (
