@@ -1,4 +1,4 @@
-package dappsignature
+package dappsig
 
 import (
 	"encoding/hex"

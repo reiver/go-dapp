@@ -67,11 +67,11 @@ func LoadPublicKeyFromHexadecimalString(hexstr string) (PublicKey, error) {
 	return LoadPublicKeyFromBytes(data)
 }
 
-func LoadPublicKeyFromMessageAndSignature(message dappmessage.Message, signature dappsignature.Signature) (PublicKey, error) {
+func LoadPublicKeyFromMessageAndSignature(message dappmessage.Message, signature dappsig.Signature) (PublicKey, error) {
 	return LoadPublicKeyFromEthereumTextHashDigestAndSignature(message.EthereumTextHashDigest(), signature)
 }
 
-func LoadPublicKeyFromEthereumTextHashDigestAndSignature(ethereumTextHashDigest dappdigest.Digest, signature dappsignature.Signature) (PublicKey, error) {
+func LoadPublicKeyFromEthereumTextHashDigestAndSignature(ethereumTextHashDigest dappdigest.Digest, signature dappsig.Signature) (PublicKey, error) {
 
 	var signatureBytes []byte = signature.Bytes()
 	if 27 == signatureBytes[ethcrypto.RecoveryIDOffset] || 28 == signatureBytes[ethcrypto.RecoveryIDOffset] {
