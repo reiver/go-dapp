@@ -1,4 +1,4 @@
-package dappmessage
+package dappmsg
 
 import (
 	"encoding/hex"

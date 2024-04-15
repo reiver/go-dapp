@@ -13,7 +13,7 @@ import (
 
 	"github.com/reiver/go-dapp/addr"
 	"github.com/reiver/go-dapp/digest"
-	"github.com/reiver/go-dapp/message"
+	"github.com/reiver/go-dapp/msg"
 	"github.com/reiver/go-dapp/sig"
 )
 
@@ -67,7 +67,7 @@ func LoadPublicKeyFromHexadecimalString(hexstr string) (PublicKey, error) {
 	return LoadPublicKeyFromBytes(data)
 }
 
-func LoadPublicKeyFromMessageAndSignature(message dappmessage.Message, signature dappsig.Signature) (PublicKey, error) {
+func LoadPublicKeyFromMessageAndSignature(message dappmsg.Message, signature dappsig.Signature) (PublicKey, error) {
 	return LoadPublicKeyFromEthereumTextHashDigestAndSignature(message.EthereumTextHashDigest(), signature)
 }
 
