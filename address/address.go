@@ -18,7 +18,7 @@ type Address struct {
 	something bool
 }
 
-func nothing() Address {
+func NoAddress() Address {
 	return Address{}
 }
 
@@ -28,7 +28,7 @@ func LoadAddressFromBytes(data []byte) (Address, error) {
 	var   datalength    int = len(data)
 
 	if datalength != addresslength {
-		return nothing(), erorr.Errorf("dapp: bytes for address wrong size: expected length of data for 'address' to be %d bytes but was actually %d bytes", addresslength, datalength)
+		return NoAddress(), erorr.Errorf("dapp: bytes for address wrong size: expected length of data for 'address' to be %d bytes but was actually %d bytes", addresslength, datalength)
 	}
 
 	var address Address
@@ -43,7 +43,7 @@ func LoadAddressFromHexadecimalString(hexstr string) (Address, error) {
 	var length int = len(hexstr)
 
 	if length < 2 {
-		return nothing(), errHexadecimalStringAddressTooShort
+		return NoAddress(), errHexadecimalStringAddressTooShort
 	}
 
 	{
@@ -60,7 +60,7 @@ func LoadAddressFromHexadecimalString(hexstr string) (Address, error) {
 
 		data, err = hex.DecodeString(hexstr)
 		if nil != err {
-			return nothing(), erorr.Errorf("dapp: problem decoding hexadecimal-string: %w", err)
+			return NoAddress(), erorr.Errorf("dapp: problem decoding hexadecimal-string: %w", err)
 		}
 	}
 
