@@ -14,10 +14,16 @@ const (
 
 type Signature struct {
 	data []byte
+	something bool
+}
+
+func NoSignature() Signature {
+	return Signature{}
 }
 
 func LoadSignatureFromBytes(data []byte) (Signature, error) {
 	return Signature{
+		something:true,
 		data:data,
 	}, nil
 }
@@ -26,7 +32,7 @@ func LoadSignatureFromHexadecimalString(hexstr string) (Signature, error) {
 	var length int = len(hexstr)
 
 	if length < 2 {
-		return Signature{}, errHexadecimalStringSignatureTooShort
+		return NoSignature(), errHexadecimalStringSignatureTooShort
 	}
 
 	{
@@ -43,7 +49,7 @@ func LoadSignatureFromHexadecimalString(hexstr string) (Signature, error) {
 
 		data, err = hex.DecodeString(hexstr)
 		if nil != err {
-			return Signature{}, erorr.Errorf("dapp: problem decoding hexadecimal-string: %w", err)
+			return NoSignature(), erorr.Errorf("dapp: problem decoding hexadecimal-string: %w", err)
 		}
 	}
 
