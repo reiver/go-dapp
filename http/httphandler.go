@@ -8,7 +8,7 @@ import (
 	"github.com/reiver/go-path"
 )
 
-//go:embed webpage.html
+//go:embed connect-webpage.html
 var webpage []byte
 
 func ConnecHTTPHandler(httpRequestPath string) http.Handler {
