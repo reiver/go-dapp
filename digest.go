@@ -33,7 +33,7 @@ func LoadDigestFromHexadecimalString(hexstr string) (Digest, error) {
 	var length int = len(hexstr)
 
 	if length < 2 {
-		return NoDiget(), errHexadecimalStringDigestTooShort
+		return NoDigest(), errHexadecimalStringDigestTooShort
 	}
 
 	{
@@ -50,7 +50,7 @@ func LoadDigestFromHexadecimalString(hexstr string) (Digest, error) {
 
 		data, err = hex.DecodeString(hexstr)
 		if nil != err {
-			return NoDiget(), erorr.Errorf("dapp: problem decoding hexadecimal-string: %w", err)
+			return NoDigest(), erorr.Errorf("dapp: problem decoding hexadecimal-string: %w", err)
 		}
 	}
 
