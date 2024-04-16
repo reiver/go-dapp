@@ -16,7 +16,7 @@ import (
 
 var replacemekey string = "REPLACE_ME_CHALLENGE"
 
-//go:embed webpage.html
+//go:embed signin-webpage.html
 var webpage string
 
 var statusTextInternalServerError string = http.StatusText(http.StatusInternalServerError)
@@ -95,14 +95,31 @@ func (receiver internalHTTPHandler) ServeGET(responseWriter http.ResponseWriter,
 			return
 		}
 
-		var code [25]byte
-		_, err :=  rand.Read(code[:])
+		var nonce [25]byte
+		_, err :=  rand.Read(nonce[:])
 		if nil != err {
 			http.Error(responseWriter, statusTextInternalServerError, http.StatusInternalServerError)
 			return
 		}
 
-		var replacemevalue string = fmt.Sprintf("Earnie signin (%d %X)", time.Now().Unix(), code[:])
+		var replacemevalue string = fmt.Sprintf(
+				"%s wants you to sign in with your Ethereum account:"+"\n"+
+				"%s"+"\n"+
+				""+"\n"+
+				"I accept the %s Terms of Service: https://%s/tos"+"\n"+
+				""+"\n"+
+				"URI: https://${domain}"+"\n"+
+				"Version: 1"+"\n"+
+				"Chain ID: 1"+"\n"+
+				"Nonce: %d"+"\n"+
+				"Issued At: 2021-09-30T16:25:24.000Z"
+			internetDomain,
+			address,
+			internetDomain,
+			internetDomain,
+			,
+			time.Format("2006-01-02T15:04:05.999Z"),
+
 		replacemevalue = fmt.Sprintf("0x%x", replacemevalue)
 
 		var replaced string = strings.ReplaceAll(webpage, replacemekey, replacemevalue)
