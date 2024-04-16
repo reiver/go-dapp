@@ -1,4 +1,4 @@
-package dappconnect
+package dapphttp
 
 import (
 	_ "embed"
@@ -11,22 +11,19 @@ import (
 //go:embed webpage.html
 var webpage []byte
 
-var statusTextInternalServerError string = http.StatusText(http.StatusInternalServerError)
-var statusTextNotFound            string = http.StatusText(http.StatusNotFound)
-
-func HTTPHandler(httpRequestPath string) http.Handler {
+func ConnecHTTPHandler(httpRequestPath string) http.Handler {
 	httpRequestPath = path.Canonical(httpRequestPath)
 
-	return internalHTTPHandler{
+	return internalConnectHTTPHandler{
 		path:httpRequestPath,
 	}
 }
 
-type internalHTTPHandler struct {
+type internalConnectHTTPHandler struct {
 	path string
 }
 
-func (receiver internalHTTPHandler) ServeHTTP(responseWriter http.ResponseWriter, request *http.Request) {
+func (receiver internalConnectHTTPHandler) ServeHTTP(responseWriter http.ResponseWriter, request *http.Request) {
 	if nil == responseWriter {
 		return
 	}
