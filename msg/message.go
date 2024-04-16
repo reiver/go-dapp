@@ -17,11 +17,16 @@ const (
 
 type Message struct {
 	data []byte
+	something bool
 }
 
+func NoMessage() Message {
+	return Message{}
+}
 
 func LoadMessageFromBytes(data []byte) (Message, error) {
 	return Message{
+		something:true,
 		data:data,
 	}, nil
 }
@@ -30,7 +35,7 @@ func LoadMessageFromHexadecimalString(hexstr string) (Message, error) {
 	var length int = len(hexstr)
 
 	if length < 2 {
-		return Message{}, errHexadecimalStringMessageTooShort
+		return NoMessage(), errHexadecimalStringMessageTooShort
 	}
 
 	{
@@ -47,7 +52,7 @@ func LoadMessageFromHexadecimalString(hexstr string) (Message, error) {
 
 		data, err = hex.DecodeString(hexstr)
 		if nil != err {
-			return Message{}, erorr.Errorf("dapp: problem decoding hexadecimal-string: %w", err)
+			return NoMessage(), erorr.Errorf("dapp: problem decoding hexadecimal-string: %w", err)
 		}
 	}
 
