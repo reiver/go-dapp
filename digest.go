@@ -24,6 +24,7 @@ func NoDigest() Digest {
 
 func LoadDigestFromBytes(data []byte) (Digest, error) {
 	return Digest{
+		something:true,
 		data:data,
 	}, nil
 }
