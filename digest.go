@@ -1,4 +1,4 @@
-package dappdigest
+package dapp
 
 import (
 	"encoding/hex"

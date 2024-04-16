@@ -1,4 +1,4 @@
-package dappsig
+package dapp
 
 import (
 	"encoding/hex"
@@ -48,6 +48,16 @@ func LoadSignatureFromHexadecimalString(hexstr string) (Signature, error) {
 	}
 
 	return LoadSignatureFromBytes(data)
+}
+
+func (receiver Signature) SigningAddress(message Message) (Address, error) {
+
+	publicKeyFromSignature, err := LoadPublicKeyFromMessageAndSignature(message, receiver)
+	if nil != err {
+		return NoAddress(), err
+	}
+
+	return publicKeyFromSignature.Address()
 }
 
 func (receiver Signature) Bytes() []byte {

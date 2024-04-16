@@ -1,4 +1,4 @@
-package dapppubkey
+package dapp
 
 import (
 	"crypto/ecdsa"
@@ -10,11 +10,6 @@ import (
 	ethcommon "github.com/ethereum/go-ethereum/common"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	"sourcecode.social/reiver/go-erorr"
-
-	"github.com/reiver/go-dapp/addr"
-	"github.com/reiver/go-dapp/digest"
-	"github.com/reiver/go-dapp/msg"
-	"github.com/reiver/go-dapp/sig"
 )
 
 const (
@@ -67,11 +62,11 @@ func LoadPublicKeyFromHexadecimalString(hexstr string) (PublicKey, error) {
 	return LoadPublicKeyFromBytes(data)
 }
 
-func LoadPublicKeyFromMessageAndSignature(message dappmsg.Message, signature dappsig.Signature) (PublicKey, error) {
+func LoadPublicKeyFromMessageAndSignature(message Message, signature Signature) (PublicKey, error) {
 	return LoadPublicKeyFromEthereumTextHashDigestAndSignature(message.EthereumTextHashDigest(), signature)
 }
 
-func LoadPublicKeyFromEthereumTextHashDigestAndSignature(ethereumTextHashDigest dappdigest.Digest, signature dappsig.Signature) (PublicKey, error) {
+func LoadPublicKeyFromEthereumTextHashDigestAndSignature(ethereumTextHashDigest Digest, signature Signature) (PublicKey, error) {
 
 	var signatureBytes []byte = signature.Bytes()
 	if 27 == signatureBytes[ethcrypto.RecoveryIDOffset] || 28 == signatureBytes[ethcrypto.RecoveryIDOffset] {
@@ -86,9 +81,9 @@ func LoadPublicKeyFromEthereumTextHashDigestAndSignature(ethereumTextHashDigest 
 	return LoadPublicKeyFromBytes(pubKeyData)
 }
 
-func (receiver PublicKey) Address() (dappaddr.Address, error) {
+func (receiver PublicKey) Address() (Address, error) {
 	if !receiver.something {
-		return dappaddr.NoAddress(), errNothing
+		return NoAddress(), errNothing
 	}
 
 	var ecdsaPublicKey ecdsa.PublicKey
@@ -97,13 +92,13 @@ func (receiver PublicKey) Address() (dappaddr.Address, error) {
 
 		ecdsaPublicKey, err = receiver.ECDSAPublicKey()
 		if nil != err {
-			return dappaddr.NoAddress(), err
+			return NoAddress(), err
 		}
 	}
 
 	var addressFromECDSAPublicKey ethcommon.Address = ethcrypto.PubkeyToAddress(ecdsaPublicKey)
 
-	return dappaddr.LoadAddressFromBytes(addressFromECDSAPublicKey[:])
+	return LoadAddressFromBytes(addressFromECDSAPublicKey[:])
 }
 
 func (receiver PublicKey) Bytes() []byte {

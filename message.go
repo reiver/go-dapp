@@ -1,4 +1,4 @@
-package dappmsg
+package dapp
 
 import (
 	"encoding/hex"
@@ -7,8 +7,6 @@ import (
 
 	ethaccounts "github.com/ethereum/go-ethereum/accounts"
 	"sourcecode.social/reiver/go-erorr"
-
-	"github.com/reiver/go-dapp/digest"
 )
 
 const (
@@ -67,10 +65,10 @@ func (receiver Message) HexadecimalString() string {
 	return fmt.Sprintf("0x%x", receiver.data)
 }
 
-func (receiver Message) EthereumTextHashDigest() dappdigest.Digest {
+func (receiver Message) EthereumTextHashDigest() Digest {
 	var digestBytes []byte = ethaccounts.TextHash(receiver.data)
 
-	digest, _ := dappdigest.LoadDigestFromBytes(digestBytes)
+	digest, _ := LoadDigestFromBytes(digestBytes)
 
 	return digest
 }

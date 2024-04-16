@@ -1,4 +1,4 @@
-package dappaddr
+package dapp
 
 import (
 	"encoding/hex"
